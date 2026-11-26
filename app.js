@@ -1,15 +1,20 @@
+import pelicanTown from './assets/pelican-town.webp'
+import theSummit from './assets/the-summit.png'
+import marriageScene from './assets/marriage-scene.webp'
+import titleScreen from './assets/title-screen.png'
+
 const wishTime = '待确认'
 const birthdayConfig = {
   celebrant: '寿星', pinyin: 'BIRTHDAY', age: 'XX',
   birthdayDate: '2030-10-01T18:00:00+08:00', dateDot: '2030 · 10 · 01',
   dateCn: '2030年10月1日 · 星期二', calendarDay: '01', calendarYear: '2030', season: '秋',
   wishTime,
-  // 替换 gallery 中的 src / alt / caption，即可展示寿星自己的照片
+  // 把照片放进 assets 后，在此 import 并替换 gallery 的 src / alt / caption
   gallery: [
-    { src: '/assets/pelican-town.webp', alt: '鹈鹕镇风景', caption: '出发去参加派对' },
-    { src: '/assets/the-summit.png', alt: '山顶景色', caption: '一起走到山顶' },
-    { src: '/assets/marriage-scene.webp', alt: '星露谷合影', caption: '留下特别合影' },
-    { src: '/assets/title-screen.png', alt: '星露谷标题画面', caption: '新一岁的冒险开始' },
+    { src: pelicanTown, alt: '鹈鹕镇风景', caption: '出发去参加派对' },
+    { src: theSummit, alt: '山顶景色', caption: '一起走到山顶' },
+    { src: marriageScene, alt: '星露谷合影', caption: '留下特别合影' },
+    { src: titleScreen, alt: '星露谷标题画面', caption: '新一岁的冒险开始' },
   ],
   schedule: [
     { label: '抵达鹈鹕镇', time: '待确认', description: '在派对小屋集合，领取今日任务' },
