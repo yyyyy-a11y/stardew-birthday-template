@@ -1,12 +1,19 @@
+const wishTime = '待确认'
 const birthdayConfig = {
-  celebrant: '寿星', age: 'XX',
+  celebrant: '寿星', pinyin: 'BIRTHDAY', age: 'XX',
   birthdayDate: '2030-10-01T18:00:00+08:00', dateDot: '2030 · 10 · 01',
   dateCn: '2030年10月1日 · 星期二', calendarDay: '01', calendarYear: '2030', season: '秋',
-  venue: '示例市幸福区星露谷派对小屋', venueShort: '星露谷派对小屋',
-  navigationUrl: 'https://uri.amap.com/search?keyword=%E7%A4%BA%E4%BE%8B%E5%B8%82%E5%B9%B8%E7%A6%8F%E5%8C%BA%E6%98%9F%E9%9C%B2%E8%B0%B7%E6%B4%BE%E5%AF%B9%E5%B0%8F%E5%B1%8B&src=stardew-birthday&callnative=1',
+  wishTime,
+  // 替换 gallery 中的 src / alt / caption，即可展示寿星自己的照片
+  gallery: [
+    { src: '/assets/pelican-town.webp', alt: '鹈鹕镇风景', caption: '出发去参加派对' },
+    { src: '/assets/the-summit.png', alt: '山顶景色', caption: '一起走到山顶' },
+    { src: '/assets/marriage-scene.webp', alt: '星露谷合影', caption: '留下特别合影' },
+    { src: '/assets/title-screen.png', alt: '星露谷标题画面', caption: '新一岁的冒险开始' },
+  ],
   schedule: [
     { label: '抵达鹈鹕镇', time: '待确认', description: '在派对小屋集合，领取今日任务' },
-    { label: '点亮生日蜡烛', time: '待确认', description: '唱生日歌，见证寿星许下新愿望' },
+    { label: '点亮生日蜡烛', time: wishTime, description: '唱生日歌，见证寿星许下新愿望' },
     { label: '星之果实宴会', time: '待确认', description: '分享蛋糕、游戏和当日限定菜单' },
     { label: '保存快乐存档', time: '待确认', description: '拍下全员合影，完成特别委托' },
   ],
@@ -15,8 +22,7 @@ const birthdayConfig = {
 const values = { ...birthdayConfig }
 document.querySelectorAll('[data-content]').forEach((el) => {
   const key = el.dataset.content
-  if (key in values && key !== 'schedule') el.textContent = values[key]
-  if (key === 'navigationLink') el.href = birthdayConfig.navigationUrl
+  if (key in values && key !== 'schedule' && key !== 'gallery') el.textContent = values[key]
 })
 
 const target = new Date(birthdayConfig.birthdayDate)
@@ -47,6 +53,60 @@ function updateQuest() {
   document.querySelector('#quest-count').textContent = `${done} / ${birthdayConfig.schedule.length}`
   document.querySelector('#quest-progress').style.width = `${done / birthdayConfig.schedule.length * 100}%`
 }
+
+const photoGallery = document.querySelector('#photo-gallery')
+const lightbox = document.querySelector('#photo-lightbox')
+const lightboxImage = document.querySelector('#lightbox-image')
+const lightboxCaption = document.querySelector('#lightbox-caption')
+const lightboxCounter = document.querySelector('#lightbox-counter')
+let currentPhoto = 0
+let lastPhotoTrigger = null
+
+birthdayConfig.gallery.forEach((photo, index) => {
+  const card = document.createElement('button')
+  card.type = 'button'
+  card.className = 'photo-card'
+  card.setAttribute('aria-label', `查看照片：${photo.caption || photo.alt || index + 1}`)
+  const img = document.createElement('img')
+  img.src = photo.src
+  img.alt = photo.alt || ''
+  img.loading = 'lazy'
+  img.decoding = 'async'
+  const caption = document.createElement('span')
+  caption.textContent = photo.caption || ''
+  card.append(img, caption)
+  card.addEventListener('click', () => { lastPhotoTrigger = card; openPhoto(index) })
+  photoGallery.append(card)
+})
+
+function openPhoto(index) {
+  currentPhoto = (index + birthdayConfig.gallery.length) % birthdayConfig.gallery.length
+  const photo = birthdayConfig.gallery[currentPhoto]
+  lightboxImage.src = photo.src
+  lightboxImage.alt = photo.alt || ''
+  lightboxCaption.textContent = photo.caption || ''
+  lightboxCounter.textContent = `${currentPhoto + 1} / ${birthdayConfig.gallery.length}`
+  lightbox.hidden = false
+  document.body.style.overflow = 'hidden'
+  document.querySelector('[data-lightbox-close]').focus()
+}
+function closePhoto() {
+  lightbox.hidden = true
+  document.body.style.overflow = ''
+  lastPhotoTrigger?.focus()
+}
+function stepPhoto(step) { openPhoto(currentPhoto + step) }
+
+document.querySelector('[data-lightbox-close]').addEventListener('click', closePhoto)
+document.querySelector('[data-lightbox-prev]').addEventListener('click', () => stepPhoto(-1))
+document.querySelector('[data-lightbox-next]').addEventListener('click', () => stepPhoto(1))
+lightbox.addEventListener('click', (event) => { if (event.target === lightbox) closePhoto() })
+document.addEventListener('keydown', (event) => {
+  if (lightbox.hidden) return
+  if (event.key === 'Escape') closePhoto()
+  if (event.key === 'ArrowLeft') stepPhoto(-1)
+  if (event.key === 'ArrowRight') stepPhoto(1)
+})
 
 let gifted = false
 document.querySelectorAll('[data-gift]').forEach((button) => button.addEventListener('click', () => {

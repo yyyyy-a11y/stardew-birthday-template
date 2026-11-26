@@ -34,7 +34,7 @@
       </div>
       <article class="letter reveal is-visible">
         <header class="letter-header"><div class="letter-stamp"><img src="/assets/junimo.gif" alt="祝尼魔邮票" /></div><div><p class="letter-from">PELICAN TOWN EXPRESS</p><small>一封来自刘易斯镇长的信</small></div><b>!</b></header>
-        <div class="quest-title"><small>LIMITED BIRTHDAY QUEST</small><h1><span data-content="celebrant">寿星</span>的<br /><em>新一岁任务</em></h1></div>
+        <div class="quest-title"><small>LIMITED BIRTHDAY QUEST</small><h1><span data-content="celebrant">寿星</span>的<br /><em>新一岁任务</em></h1><p class="celebrant-en" data-content="pinyin">BIRTHDAY</p></div>
         <p class="letter-copy">亲爱的冒险者：仅出现一次的生日节日即将开启。请准时抵达鹈鹕镇，与我们共同解锁 <b>LEVEL <span data-content="age">XX</span></b>。</p>
         <div class="letter-meta"><span><small>DATE</small><b data-content="dateDot">2030 · 10 · 01</b></span><span><small>REWARD</small><b>友情 +1000</b></span></div>
         <button class="wax-seal" type="button" data-scroll="#calendar" aria-label="接受生日任务"><span>接受任务</span><b>★</b></button>
@@ -57,7 +57,7 @@
       <div class="section-label light reveal"><small>QUEST JOURNAL</small><h2>生日特别委托</h2><p>完成全部目标，领取限定回忆</p></div>
       <article class="quest-journal reveal">
         <div class="journal-pin">!</div>
-        <header><small>SPECIAL ORDER</small><h3>「新一岁，大丰收」</h3><span class="progress"><i id="quest-progress"></i></span><b id="quest-count">0 / 4</b></header>
+        <header><small>SPECIAL ORDER</small><h3>「新一岁，大丰收」</h3><p class="wish-time">许愿时刻 <b data-content="wishTime">待确认</b></p><span class="progress"><i id="quest-progress"></i></span><b id="quest-count">0 / 4</b></header>
         <p class="quest-copy">鹈鹕镇需要你的帮助！请按时参加寿星的生日派对，并完成以下庆祝目标。</p>
         <div class="quest-list" data-content="schedule"></div>
         <div class="reward"><span>任务奖励</span><b>永久友情 +1000</b><strong>★ 回忆值 MAX</strong></div>
@@ -90,14 +90,10 @@
       <p class="gift-note reveal">无需准备现实礼物，你的到来就是“最爱礼物”。</p>
     </section>
 
-    <section class="route-zone" id="route">
-      <div class="section-label light reveal"><small>BUS TICKET</small><h2>前往节日现场</h2><p>下一班车即将从农场出发</p></div>
-      <article class="ticket reveal">
-        <div class="ticket-main"><span>PELICAN TOWN TRANSIT</span><img src="/assets/bus.png" alt="星露谷巴士" /><small>DESTINATION</small><h3 data-content="venueShort">星露谷派对小屋</h3><p data-content="venue">示例市幸福区星露谷派对小屋</p></div>
-        <div class="ticket-stub"><small>DATE</small><b data-content="dateDot">2030 · 10 · 01</b><small>PASSENGER</small><b>YOU +1</b></div>
-      </article>
-      <div class="map-window reveal"><img src="/assets/pelican-town.webp" alt="鹈鹕镇地图" /><span class="map-marker">★<small>派对</small></span></div>
-      <a class="route-button reveal" data-content="navigationLink" rel="noreferrer">打开现实世界地图 →</a>
+    <section class="gallery-zone" id="gallery">
+      <div class="section-label light reveal"><small>PHOTO ALBUM</small><h2>生日回忆相册</h2><p>点开照片，翻看星露谷里的美好瞬间</p></div>
+      <div class="photo-gallery reveal" id="photo-gallery" aria-label="生日照片墙"></div>
+      <p class="gallery-note reveal">★ 在 app.js 的 birthdayConfig.gallery 中替换图片地址，就能换成寿星的照片 ★</p>
     </section>
 
     <section class="final-zone" id="ending">
@@ -110,6 +106,16 @@
       <footer>非官方粉丝创作 · 游戏素材版权归 ConcernedApe 所有<br />仅用于私人生日邀请，不作商业用途</footer>
     </section>
   </main>
+  <div class="photo-lightbox" id="photo-lightbox" hidden role="dialog" aria-modal="true" aria-label="生日照片预览">
+    <button class="lightbox-close" type="button" data-lightbox-close aria-label="关闭照片预览">×</button>
+    <img id="lightbox-image" src="" alt="" />
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+    <div class="lightbox-controls">
+      <button type="button" data-lightbox-prev aria-label="上一张照片">◀ 上一张</button>
+      <span id="lightbox-counter">1 / 1</span>
+      <button type="button" data-lightbox-next aria-label="下一张照片">下一张 ▶</button>
+    </div>
+  </div>
   <audio id="birthday-music" src="/assets/birthday-bgm.mp3" preload="metadata" loop></audio>
   <p id="audio-status" class="sr-only" aria-live="polite"></p>
   <script type="module" src="/app.js"></script>
